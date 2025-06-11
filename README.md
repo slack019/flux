@@ -23,8 +23,6 @@ git clone --depth 1 https://github.com/slack019/flux.git flux/
 
 `-DBUILD_TESTS` - if you want to build library tests(ON/OFF)
 
-`-DCMAKE_BUILD_TYPE` - Build type (Debug, Release)
-
 `-DFLUX_INSTALL` - Generate target for installing flux (ON/OFF)
 
 ```bash
