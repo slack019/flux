@@ -177,7 +177,19 @@ namespace fl::containers {
   } 
 
   std::istream& operator>>(std::istream& istream, string& string_object) {
-    // TODO
+    char* buf {new char[1000]};
+    
+    istream.getline(buf, 1000);
+
+    string_object.m_size = strlen(buf);
+    string_object.m_capacity = string_object.m_size + 1; 
+    string_object.m_ascii_string = new char[string_object.m_capacity]{};
+
+    strcpy(string_object.m_ascii_string, buf);
+
+    delete[] buf;
+
+    return istream; 
   }
   
   string operator+(const string& first_string_object, const string& second_string_object) {

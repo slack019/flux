@@ -184,3 +184,17 @@ TEST(String, String_operators_operator_n_eq) {
 
   ASSERT_TRUE(string != string_another);
 }
+
+TEST(String, String_operator_cout) { 
+  fl::containers::string string {"Hello!"};
+
+  std::cout << "Hello!" << std::endl;
+}
+
+TEST(String, String_operators_cin) {
+  fl::containers::string string;
+  
+  std::cout << "[TEST OPERATOR >> | ENTER VALUE] ";
+  std::cin >> string; 
+  std::cout << "[STRING VALUE] " << string << std::endl; 
+}
