@@ -101,11 +101,11 @@ namespace fl::containers {
   }
 
   bool string::empty() const {
-    if(m_ascii_string == nullptr) {
-      return true;
+    if(m_ascii_string != nullptr) {
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   void string::clear() {
@@ -120,35 +120,56 @@ namespace fl::containers {
     if(m_ascii_string != nullptr) {
       delete[] m_ascii_string;
     }
-
+    
     m_ascii_string = nullptr;
     m_size = 0;
     m_capacity = 0;
   }
   
-  void string::resize(const size_t& size_of_reallocated, char fill_character) {
-    if(m_ascii_string != nullptr) {
-      delete[] m_ascii_string;
+  void string::resize(const size_t& size_of_reallocated, char fill_character) {   
+    if(size_of_reallocated <= m_size) {
+      m_size = size_of_reallocated;
+      memmove(m_ascii_string, m_ascii_string, size_of_reallocated);                    
+      m_ascii_string[m_size] = '\0';
+      return; 
     }
     
-    if(size_of_reallocated == m_size) {
-      return;
-    } 
-    
+    char* buf {new char[m_capacity]{}};
+    size_t buf_length {m_size};  
+
+    strcpy(buf, m_ascii_string);
+
+    shrink_to_fit();   
+  
     m_size = size_of_reallocated;
-    m_capacity = m_size + 1;   
+    m_capacity = m_size + 1;
     m_ascii_string = new char[m_capacity]{};
+
+    strcpy(m_ascii_string, buf);
+  
+    memset(m_ascii_string + buf_length, fill_character, m_size - buf_length); 
     
-    memset(m_ascii_string, fill_character, m_size);
+    delete[] buf; 
   }
   
   void string::reserve(const size_t& reserve_size) {
+    if(reserve_size <= m_capacity) {
+      return;  
+    } 
+    
+    char* buf {new char[reserve_size]{}};
+
     if(m_ascii_string != nullptr) {
+      strcpy(buf, m_ascii_string);
       delete[] m_ascii_string; 
     }
-
-    m_capacity = reserve_size;
+  
+    m_capacity = reserve_size; 
     m_ascii_string = new char[m_capacity]{};
+    
+    strcpy(m_ascii_string, buf);
+
+    delete[] buf; 
   }
   
   std::ostream& operator<<(std::ostream& ostream, const string& string_object) {
@@ -175,19 +196,20 @@ namespace fl::containers {
     char* buf {new char[m_capacity]{}};
 
     if(m_ascii_string != nullptr) { 
-      buf = m_ascii_string; 
+      strcpy(buf, m_ascii_string); 
       delete[] m_ascii_string;
     }
 
     m_size += strlen(ascii_string); 
     m_capacity += (m_size + 1);
 
-    m_ascii_string = new char[m_capacity]{*buf};
-
-    strcat(m_ascii_string, ascii_string);
+    m_ascii_string = new char[m_capacity]{};
     
-    m_ascii_string[m_size] = '\0';
-
+    strcpy(m_ascii_string, buf);
+    strcat(m_ascii_string, ascii_string);
+  
+    delete[] buf; 
+   
     return *this;
   }
 
@@ -195,18 +217,19 @@ namespace fl::containers {
     char* buf {new char[m_capacity]{}};
     
     if(m_ascii_string != nullptr) { 
-      buf = m_ascii_string;
+      strcpy(buf, m_ascii_string);
       delete[] m_ascii_string;
     }
     
     m_size += string_object.m_size;
     m_capacity += string_object.m_capacity;
     
-    m_ascii_string = new char[m_capacity]{*buf};
+    m_ascii_string = new char[m_capacity]{};
+      
+    strcpy(m_ascii_string, buf);
+    strcat(m_ascii_string, string_object.m_ascii_string);  
     
-    strcat(m_ascii_string, string_object.m_ascii_string);
-    
-    m_ascii_string[m_size] = '\0';
+    delete[] buf; 
     
     return *this;
   }
@@ -246,7 +269,6 @@ namespace fl::containers {
     return strcmp(m_ascii_string, string_object.m_ascii_string) == 0 ? false: true;
   }
   
-
 } // fl::containers
 
 

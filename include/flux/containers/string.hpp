@@ -29,8 +29,7 @@
 #include <algorithm> // for std::min, std::max
 #include <utility> // for std::swap, std::move
 #include <compare> // for std::strong_ordering
-#include <ostream> // for std::ostream
-#include <istream> // for std::istream 
+#include <iostream>
 
 #include <cstddef> 
 #include <cstring> 
