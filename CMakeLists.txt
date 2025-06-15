@@ -66,7 +66,9 @@ generate_export_header(flux EXPORT_FILE_NAME include/flux/${export_file_name})
 set(SOURCES 
   include/flux/containers/string.hpp
   include/flux/export-flux.hpp
-  source/containers/string.cpp)
+  include/flux/containers/vector.hpp
+  source/containers/string.cpp
+  source/containers/vector.cpp)
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${SOURCES})
 

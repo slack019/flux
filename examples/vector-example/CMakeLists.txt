@@ -21,6 +21,25 @@
 # SOFTWARE.
 
 cmake_minimum_required(VERSION 3.23)
+project(vector-example LANGUAGES CXX) 
 
-add_subdirectory(string-example)
-add_subdirectory(vector-example)
+# Set cxx standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" PROJECT_IS_TOP_LEVEL)
+
+if(PROJECT_IS_TOP_LEVEL)
+    find_package(flux REQUIRED)
+endif()
+
+# Sources 
+set(SOURCES 
+  vector-example.cpp)
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${SOURCES})
+
+# Initialized below
+add_executable(vector-example)
+target_sources(vector-example PRIVATE ${SOURCES})
+target_link_libraries(vector-example PRIVATE flux::flux)

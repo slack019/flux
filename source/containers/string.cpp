@@ -129,7 +129,7 @@ namespace fl::containers {
   void string::resize(const size_t& size_of_reallocated, char fill_character) {   
     if(size_of_reallocated <= m_size) {
       m_size = size_of_reallocated;
-      memmove(m_ascii_string, m_ascii_string, size_of_reallocated);                    
+      memmove(m_ascii_string, m_ascii_string, m_size);                    
       m_ascii_string[m_size] = '\0';
       return; 
     }
@@ -139,7 +139,7 @@ namespace fl::containers {
 
     strcpy(buf, m_ascii_string);
 
-    shrink_to_fit();   
+    delete[] m_ascii_string;  
   
     m_size = size_of_reallocated;
     m_capacity = m_size + 1;
